@@ -44,6 +44,8 @@
 // automatically deals with contact chatter or "bounce", and
 // it makes detecting changes very simple.
 
+// Main
+
 Bounce leftarrow = Bounce(0, 10); // pin# , debounce time
 Bounce rightarrow = Bounce(1, 10); // 10 = 10 ms debounce time
 Bounce uparrow = Bounce(2, 10); // which is appropriate for most mechanical pushbuttons
@@ -83,6 +85,16 @@ void setup() {
 
 }
 
+void flashled(int ledpin, int duration){
+  // int ledpin = 13;
+  // int duration = 100;
+  digitalWrite(ledpin, HIGH);
+  delay(duration);
+  digitalWrite(ledpin, LOW);
+  Keyboard.releaseAll();
+
+}
+
 void loop() {
     // Update all the button objects.
   leftarrow.update();
@@ -101,45 +113,38 @@ void loop() {
 
   if (leftarrow.fallingEdge()) {
   Keyboard.press(KEY_LEFT);
-    flashled();
-  }
+  flashled(13, 100);
+ }
   if (rightarrow.fallingEdge()) {
     Keyboard.press(KEY_RIGHT);
-    flashled();
+    flashled(13, 100);
   }
   if (uparrow.fallingEdge()) {
     Keyboard.press(KEY_UP);
-    flashled();
+    flashled(13, 100);
   }
   if (downarrow.fallingEdge()) {
     Keyboard.press(KEY_DOWN);    // need a delay?
-    flashled();
+    flashled(13, 100);
   }
   if (spacebar.fallingEdge()) {
     Keyboard.press(KEY_SPACE);
-    flashled();
+    flashled(13, 100);
   }
   if (playpause.fallingEdge()) {
     Keyboard.press(KEY_MEDIA_PLAY_PAUSE);
-    flashled();
+    flashled(13, 100);
   }
   if (esc.fallingEdge()) {
     Keyboard.press(KEY_ESC);
-    flashled();
+    flashled(13, 100);
   }
  if (enter.fallingEdge()) {
     Keyboard.press(KEY_ENTER);
-    flashled();
+    flashled(13, 100);
   }
 
 // release (i.e. risingEdge) is unused
 
 }
 
-void flashled(){
-  int ledpin = 13;
-  int duration = 100;
-  digitalWrite(ledpin, HIGH);
-  delay(duration);
-  digitalWrite(ledpin, LOW);
-}
