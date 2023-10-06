@@ -9,7 +9,7 @@
 //  I could treat all the keys the same as the down arrow - just like a regular KB does, there's no REQUIREMENT to only blip the key.
 //  I just did it that was initially bc it was easiest. But if they ALL did press/flash, release, that should be fine, too.
 
-
+// Though then I wonder if the bouncerate (actually de-bounce) is too high, and a quick press/release would not register the release and it would hang pressed? I'll have to test.
 
 
 
