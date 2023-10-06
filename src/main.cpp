@@ -6,6 +6,14 @@
 //  Better 'release' placement.
 //  Easier customization/maintenance?
 
+//  I could treat all the keys the same as the down arrow - just like a regular KB does, there's no REQUIREMENT to only blip the key.
+//  I just did it that was initially bc it was easiest. But if they ALL did press/flash, release, that should be fine, too.
+
+
+
+
+
+
 int LEDpin = 13;
 int LEDduration = 100;
 int bouncerate = 250;
