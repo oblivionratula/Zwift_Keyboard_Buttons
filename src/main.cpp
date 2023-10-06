@@ -55,7 +55,7 @@ void flashled(int LEDpin, int duration){
   digitalWrite(LEDpin, HIGH);
   delay(duration);
   digitalWrite(LEDpin, LOW);
-  Keyboard.releaseAll();
+  // Keyboard.releaseAll();
 }
 
 void loop() {
@@ -90,6 +90,10 @@ void loop() {
     Keyboard.press(KEY_UP);
     flashled(LEDpin, LEDduration);
   }
+  if (downarrow.fallingEdge()) {
+    Keyboard.press(KEY_DOWN);
+    flashled(LEDpin, LEDduration);
+  }
   if (spacebar.fallingEdge()) {
     Keyboard.press(KEY_SPACE);
     flashled(LEDpin, LEDduration);
@@ -114,11 +118,35 @@ void loop() {
     Keyboard.press(KEY_A);
     flashled(LEDpin, LEDduration);
   }
-  // Special Case!
-  if (downarrow.fallingEdge()) {
-    Keyboard.press(KEY_DOWN);    // need a delay?
-  }
+// RISING (released)
+  if (leftarrow.risingEdge()) {
+    Keyboard.release(KEY_LEFT);
+  }  
+  if (rightarrow.risingEdge()) {
+    Keyboard.release(KEY_RIGHT);
+  }  
+  if (uparrow.risingEdge()) {
+    Keyboard.release(KEY_UP);
+  }  
   if (downarrow.risingEdge()) {
-    Keyboard.release(KEY_DOWN);    // YES! But we get no LED flash, which is fine.
+    Keyboard.release(KEY_DOWN);
+  }  
+  if (spacebar.risingEdge()) {
+    Keyboard.release(KEY_SPACE);
+  }  
+  if (playpause.risingEdge()) {
+    Keyboard.release(KEY_MEDIA_PLAY_PAUSE);
+  }  
+  if (esc.risingEdge()) {
+    Keyboard.release(KEY_ESC);
+  }  
+  if (enter.risingEdge()) {
+    Keyboard.release(KEY_ENTER);
+  }  
+  if (g_key.risingEdge()) {
+    Keyboard.release(KEY_G);
+  }  
+  if (a_key.risingEdge()) {
+    Keyboard.release(KEY_A);
   }  
 }
