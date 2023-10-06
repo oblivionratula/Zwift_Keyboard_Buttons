@@ -1,150 +1,116 @@
 #include <Bounce.h>
 #include <Arduino.h>
 
-//  ToDo -
-//  1) Actually get Teensy and build/test.
-//  2) Add media buttons?  Getting a bit unwieldy for an Altoid tin.
+//  To Do -
+//  Proper enclosure - or at least make Altoid tin mountable.
+//  Better 'release' placement.
+//  Easier customization/maintenance?
 
-// Navigating the UI
-// You can use the following shortcuts when navigating the UI including the Home Screen and your in-game settings.
-
-// Enter	Select.
-// Esc	Go back.
-// ←	Navigate left.
-// ↑	Navigate up.
-// →	Navigate right.
-// ↓	Navigate down.
-
-// Riding, Running, or Working Out in Zwift
-// Check out the table below for available shortcuts while riding, running, working out, or participating in an event.
-
-// ESC Go back.
-// A	Access the PAIRED DEVICES screen.
-// T	Access your GARAGE.
-// G	Toggle Watt/HR Graphs When Riding
-// M	Send a group text.
-// 1-9	Change your camera view.
-// H	Show or hide the display.
-// F1-F8	Actions + Sound.
-// PC: F10
-// OSX: Function + F10	Take a screenshot.
-// OSX: Function + F9	Capture a video.
-// Space Bar	Activate a power-up.
-// P	Enter a Promo Code.
-// Down Arrow	Make a U-Turn.
-// Up Arrow	Display the Action Bar.
-// Left and Right Arrows	Initiate a turn at an intersection.
-// E	Open the TRAINING menu.
-// Tab	Skip a workout step.
-// Page Up/Page Down	Increase or decrease the FTP Bias.
-
-// From https://forum.pjrc.com/threads/53297-Could-anyone-show-me-the-Teensy-2-0-Keyboard-Code
+int LEDpin = 13;
+int LEDduration = 100;
+int bouncerate = 250;
 
 // Create Bounce objects for each button. The Bounce object
 // automatically deals with contact chatter or "bounce", and
 // it makes detecting changes very simple.
 
-// Main
-
-Bounce leftarrow = Bounce(0, 10); // pin# , debounce time
-Bounce rightarrow = Bounce(1, 10); // 10 = 10 ms debounce time
-Bounce uparrow = Bounce(2, 10); // which is appropriate for most mechanical pushbuttons
-Bounce downarrow = Bounce(3, 10); // Does this need longer to avoid accidental U-Turns, or is that handles in software?
-Bounce spacebar = Bounce(4, 10);
-Bounce playpause = Bounce(5, 10); // if a button is too "sensitive"
-Bounce esc = Bounce(6, 10); // to rapid touch, you can
-Bounce enter = Bounce(7, 10); // increase this time.
-// Bounce button8 = Bounce(8, 10);
-// Bounce button9 = Bounce(9, 10);
+Bounce leftarrow = Bounce(21, bouncerate);  // pin# , debounce time
+Bounce rightarrow = Bounce(22, bouncerate); // 10 = 10 ms debounce time
+Bounce uparrow = Bounce(0, bouncerate);     // which is appropriate for most mechanical pushbuttons
+Bounce downarrow = Bounce(23, bouncerate);  // if a button is too "sensitive" 
+Bounce spacebar = Bounce(2, bouncerate);    // to rapid touch, you can increase this.
+Bounce playpause = Bounce(5, bouncerate); // Control music
+Bounce esc = Bounce(6, bouncerate);
+Bounce enter = Bounce(7, bouncerate);
+Bounce g_key = Bounce(3, bouncerate);  // Workout Graph
+Bounce a_key = Bounce(9, bouncerate);   // Pairing Screen
 
 
 
 void setup() {
 // Configure the pins for input mode with pullup resistors.
-// The pushbuttons connect from each pin to ground. When
-// the button is pressed, the pin reads LOW because the button
-// shorts it to ground. When released, the pin reads HIGH
-// because the pullup resistor connects to +5 volts inside
-// the chip. LOW for "on", and HIGH for "off" may seem
-// backwards, but using the on-chip pullup resistors is very
-// convenient. The scheme is called "active low", and it's
-// very commonly used in electronics... so much that the chip
-// has built-in pullup resistors!
   pinMode(0, INPUT_PULLUP);
   pinMode(1, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
   pinMode(3, INPUT_PULLUP);
   pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
-  pinMode(6, INPUT_PULLUP); 
-  pinMode(7, INPUT_PULLUP);
-// pinMode(8, INPUT_PULLUP);
-// pinMode(9, INPUT_PULLUP);
-
-  pinMode(13, OUTPUT);
-
+  pinMode(10, INPUT_PULLUP);
+  pinMode(17, INPUT_PULLUP);
+  pinMode(21, INPUT_PULLUP);
+  pinMode(22, INPUT_PULLUP);
+  pinMode(23, INPUT_PULLUP);
+// Output  
+  pinMode(LEDpin, OUTPUT);    // On-board LED used to ack button-presses
 }
 
-void flashled(int ledpin, int duration){
-  // int ledpin = 13;
-  // int duration = 100;
-  digitalWrite(ledpin, HIGH);
+void flashled(int LEDpin, int duration){
+  digitalWrite(LEDpin, HIGH);
   delay(duration);
-  digitalWrite(ledpin, LOW);
+  digitalWrite(LEDpin, LOW);
   Keyboard.releaseAll();
-
 }
 
 void loop() {
-    // Update all the button objects.
+  // Update all the button objects.
+  // (There has to be a better way.)
   leftarrow.update();
   rightarrow.update();
   uparrow.update();
-  downarrow.update(); // U-turn - need a delay?
+  downarrow.update();
   spacebar.update();
   playpause.update();
   esc.update();
   enter.update();
+  g_key.update();
+  a_key.update();
 
 // Check each button for "falling" edge.
-// Send keybstroke when each button presses
-// falling = high (not pressed - voltage from pullup resistor)
-// to low (pressed - button connects pin to ground)B5 release
+// Send keystroke when each button presses
+
+// The exception to this is the down arrow for a U-turn in Zwift. This needs held down
+// to avoid accidental U-turns.
 
   if (leftarrow.fallingEdge()) {
   Keyboard.press(KEY_LEFT);
-  flashled(13, 100);
- }
+  flashled(LEDpin, LEDduration);
+  }
   if (rightarrow.fallingEdge()) {
     Keyboard.press(KEY_RIGHT);
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
   if (uparrow.fallingEdge()) {
     Keyboard.press(KEY_UP);
-    flashled(13, 100);
-  }
-  if (downarrow.fallingEdge()) {
-    Keyboard.press(KEY_DOWN);    // need a delay?
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
   if (spacebar.fallingEdge()) {
     Keyboard.press(KEY_SPACE);
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
   if (playpause.fallingEdge()) {
     Keyboard.press(KEY_MEDIA_PLAY_PAUSE);
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
   if (esc.fallingEdge()) {
     Keyboard.press(KEY_ESC);
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
- if (enter.fallingEdge()) {
+  if (enter.fallingEdge()) {
     Keyboard.press(KEY_ENTER);
-    flashled(13, 100);
+    flashled(LEDpin, LEDduration);
   }
-
-// release (i.e. risingEdge) is unused
-
+  if (g_key.fallingEdge()) {
+    Keyboard.press(KEY_G);
+    flashled(LEDpin, LEDduration);
+  }
+  if (a_key.fallingEdge()) {
+    Keyboard.press(KEY_A);
+    flashled(LEDpin, LEDduration);
+  }
+  // Special Case!
+  if (downarrow.fallingEdge()) {
+    Keyboard.press(KEY_DOWN);    // need a delay?
+  }
+  if (downarrow.risingEdge()) {
+    Keyboard.release(KEY_DOWN);    // YES! But we get no LED flash, which is fine.
+  }  
 }
-
