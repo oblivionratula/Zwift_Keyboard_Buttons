@@ -14,15 +14,15 @@ int bouncerate = 250;
 // automatically deals with contact chatter or "bounce", and
 // it makes detecting changes very simple.
 
-Bounce leftarrow = Bounce(21, bouncerate);  // pin# , debounce time
-Bounce rightarrow = Bounce(22, bouncerate); // 10 = 10 ms debounce time
+Bounce leftarrow = Bounce(2, bouncerate);  // pin# , debounce time
+Bounce rightarrow = Bounce(1, bouncerate); // 10 = 10 ms debounce time
 Bounce uparrow = Bounce(0, bouncerate);     // which is appropriate for most mechanical pushbuttons
-Bounce downarrow = Bounce(23, bouncerate);  // if a button is too "sensitive" 
-Bounce spacebar = Bounce(2, bouncerate);    // to rapid touch, you can increase this.
+Bounce downarrow = Bounce(3, bouncerate);  // if a button is too "sensitive" 
+Bounce spacebar = Bounce(4, bouncerate);    // to rapid touch, you can increase this.
 Bounce playpause = Bounce(5, bouncerate); // Control music
-Bounce esc = Bounce(6, bouncerate);
-Bounce enter = Bounce(7, bouncerate);
-Bounce g_key = Bounce(3, bouncerate);  // Workout Graph
+Bounce esc = Bounce(8, bouncerate);
+Bounce enter = Bounce(6, bouncerate);
+Bounce g_key = Bounce(7, bouncerate);  // Workout Graph
 Bounce a_key = Bounce(9, bouncerate);   // Pairing Screen
 
 
@@ -34,11 +34,11 @@ void setup() {
   pinMode(2, INPUT_PULLUP);
   pinMode(3, INPUT_PULLUP);
   pinMode(4, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode(17, INPUT_PULLUP);
-  pinMode(21, INPUT_PULLUP);
-  pinMode(22, INPUT_PULLUP);
-  pinMode(23, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+  pinMode(6, INPUT_PULLUP);
+  pinMode(7, INPUT_PULLUP);
+  pinMode(8, INPUT_PULLUP);
+  pinMode(9, INPUT_PULLUP);
 // Output  
   pinMode(LEDpin, OUTPUT);    // On-board LED used to ack button-presses
 }
