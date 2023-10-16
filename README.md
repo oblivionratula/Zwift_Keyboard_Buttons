@@ -64,8 +64,7 @@ M	Send a group text.
 1-9	Change your camera view.
 H	Show or hide the display.
 F1-F8	Actions + Sound.
-PC: F10
-OSX: Function + F10	Take a screenshot.
+PC: F10 OSX: Function + F10	Take a screenshot.
 OSX: Function + F9	Capture a video.
 Space Bar	Activate a power-up.
 P	Enter a Promo Code.
